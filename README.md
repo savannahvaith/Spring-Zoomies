@@ -1,15 +1,47 @@
 # Spring-Zoomies
 
-## Beans
+# CRUD Controller
 
-Beans are managed objects, the creation, maintenance and destruction of that object is solely under the control of Spring framework.
+## Rest Controller
 
-Spring is refered to as an Inversion of Control Container due to the nature of giving up control of objects and letting Spring handle it.
+Allows for the use of `Request Mapping` to expose methods and provide config for handling requests in a RESTFUL manner
+(namely returning data in a JSON format). 
 
-Spring helpfully puts all of its beans into one centralised location called Application Context
+### GET Mapping
 
-You can access the beans from the main() method.
+Used to fetch data - `GET Requests`
 
-## Component Scan
+```java
+@GetMapping("/getAll")
+public List<Car> getAll(){
+	...
+}
+```
 
-@SpringBootApplication does a @ComponentScan to figure out what classes are @Components any that are, are stored in the beanbag!
+### POST Mapping
+
+Used to send data - `POST Requests`
+
+`@RequestBody` -  Data sent in the body of a request can be converted from JSON to a java object by marking a method parameter with @RequestBody.
+Only one parameter can be marked this way.
+
+```java
+@PostMapping("/create")
+public void create(@RequestBody Car car){
+	...
+}
+```
+
+### DELETE Mapping
+
+Used to delete data - `DELETE Request`
+
+`@PathVariable` - Extracts values from the URL to the request that was sent. 
+The value needs to match exactly. 
+
+```java
+@DeleteMapping("/remove/{id}")
+public Car remove(@PathVariable int id){
+	...
+}
+```
