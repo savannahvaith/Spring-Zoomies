@@ -10,7 +10,7 @@ public class TestController {
 	
 	@GetMapping("/test") // @TypeOfRequest("location")
 	public String thisMethod() {
-		return "Hi"; 
+		return "This is a test"; 
 	}
 
 }
