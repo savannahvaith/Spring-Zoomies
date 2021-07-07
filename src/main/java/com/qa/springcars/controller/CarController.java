@@ -3,6 +3,8 @@ package com.qa.springcars.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,23 +27,27 @@ public class CarController {
 	
 	// CREATE
 	@PostMapping("/createCar")
-	public String createCar(@RequestBody Car c) {
+	public ResponseEntity<String> createCar(@RequestBody Car c) {
 		this.vehicles.add(c);
-		return "Successfully added car";
+		return new ResponseEntity<String>("Successfully added car",HttpStatus.CREATED);
 	}
 	
 	// READ
 	@GetMapping("/readCars")
-	public List<Car> getAllCars(){
-		return this.vehicles;
+	public ResponseEntity<List<Car>> getAllCars(){
+		//return new ResponseEntity<List<Car>>(this.vehicles, HttpStatus.OK);
+		// OR: 
+		return ResponseEntity.ok(this.vehicles);
 	}
 	
 	// UPDATE - PUT (REPLACE) / PATCH (UPDATE an ELEMENT) 
 	@PatchMapping("/updateCar/{index}")
-	public Car updateCar(@PathVariable int index, @RequestBody Car newCar) {
+	public ResponseEntity<Car> updateCar(@PathVariable int index, @RequestBody Car newCar) {
 		
 		// replace the WHOLE object in a specific INDEX
-		return this.vehicles.set(index, newCar);
+		this.vehicles.set(index, newCar);
+		
+		return new ResponseEntity<Car>(newCar, HttpStatus.ACCEPTED);
 		
 		// OR Set each individual variable: 
 //		Car oldCar = this.vehicles.get(index); 
@@ -53,8 +59,9 @@ public class CarController {
 	
 	// DELETE - BY INDEX
 	@DeleteMapping("/removeCar/{index}")
-	public Car removeCar(@PathVariable int index) {
-		return this.vehicles.remove(index);
+	public ResponseEntity removeCar(@PathVariable int index) {
+		this.vehicles.remove(index);
+		return new ResponseEntity(HttpStatus.NO_CONTENT);		
 	}
 
 }
