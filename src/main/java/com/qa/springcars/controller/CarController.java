@@ -1,8 +1,8 @@
 package com.qa.springcars.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,21 +14,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.springcars.domain.Car;
+import com.qa.springcars.service.CarServiceList;
 
 @RestController
 public class CarController {
 	
 	// Mapping URLS to METHODS
 	
-	// How can i specify the datatype of the arraylist?
-	List<Car> vehicles = new ArrayList<>(); 
+	private CarServiceList service; 
+	
+	// PULL DOWN THE OBJECT FROM THE BEANBAG
+	
+	@Autowired
+	public CarController(CarServiceList service) {
+		this.service = service;
+	}
+	
 	
 	// CRUD functionality
 	
 	// CREATE
 	@PostMapping("/createCar")
 	public ResponseEntity<String> createCar(@RequestBody Car c) {
-		this.vehicles.add(c);
+		this.service.createCar(c);
 		return new ResponseEntity<String>("Successfully added car",HttpStatus.CREATED);
 	}
 	
@@ -37,7 +45,7 @@ public class CarController {
 	public ResponseEntity<List<Car>> getAllCars(){
 		//return new ResponseEntity<List<Car>>(this.vehicles, HttpStatus.OK);
 		// OR: 
-		return ResponseEntity.ok(this.vehicles);
+		return ResponseEntity.ok(this.service.getAllCars());
 	}
 	
 	// UPDATE - PUT (REPLACE) / PATCH (UPDATE an ELEMENT) 
@@ -45,7 +53,7 @@ public class CarController {
 	public ResponseEntity<Car> updateCar(@PathVariable int index, @RequestBody Car newCar) {
 		
 		// replace the WHOLE object in a specific INDEX
-		this.vehicles.set(index, newCar);
+		this.service.updateCar(index, newCar);
 		
 		return new ResponseEntity<Car>(newCar, HttpStatus.ACCEPTED);
 		
@@ -60,7 +68,7 @@ public class CarController {
 	// DELETE - BY INDEX
 	@DeleteMapping("/removeCar/{index}")
 	public ResponseEntity removeCar(@PathVariable int index) {
-		this.vehicles.remove(index);
+		this.service.removeCar(index);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);		
 	}
 
