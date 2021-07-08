@@ -1,6 +1,17 @@
 package com.qa.springcars.domain;
 
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity// Marking it as a TABLE!
 public class Car {
+	
+	@Id // Primary Key!
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO-INCREMENT
+	private Long id; 
 	
 	// Variables 
 	private String make; 
